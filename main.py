@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import gym
+import random
+import numpy as np
+import tensorflow as tf
+from skimage.transform import resize
+from skimage.color import rgb2gray
 from models.agent import Agent
 
 
@@ -25,15 +30,22 @@ tf.app.flags.DEFINE_float('momentum', 0.95, """Momentum used by RMSProp""")
 tf.app.flags.DEFINE_float('min_grad', 0.01, """Constant added to the squared gradient in the denominator of the RMSProp update""")
 tf.app.flags.DEFINE_integer('save_interval', 300000, """The frequency with which the network is saved""")
 tf.app.flags.DEFINE_integer('no_op_steps', 30, """Maximum number of "do nothing" actions to be performed by the agent at the start of an episode""")
-tf.app.flags.DEFINE_boolean('train', False, """""")
 tf.app.flags.DEFINE_boolean('load_network', False, """""")
 tf.app.flags.DEFINE_integer('num_episodes_at_test', 30, """Number of episodes the agent plays at test time""")
 
 FLAGS = tf.app.flags.FLAGS
 
+
+
+def preprocess(observation, last_observation):
+    processed_observation = np.maximum(observation, last_observation)
+    processed_observation = np.uint8(resize(rgb2gray(processed_observation), (FLAGS.frame_width, FLAGS.frame_height)) * 255)
+    return np.reshape(processed_observation, (1, FLAGS.frame_width, FLAGS.frame_height))
+
+
 def main():
     env = gym.make(FLAGS.env_name)
-    agent = Agent(num_actions=env.action_space.n)
+    agent = Agent(num_actions=env.action_space.n, config=FLAGS)
 
     if FLAGS.train:  # Train mode
         for _ in range(FLAGS.num_episodes):

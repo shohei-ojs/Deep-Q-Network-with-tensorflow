@@ -14,13 +14,13 @@ from keras.layers.convolutional import Conv2D
 
 KERAS_BACKEND = 'tensorflow'
 
-FLAGS = tf.app.flags.FLAGS
-
-SAVE_NETWORK_PATH = 'saved_networks/' + FLAGS.env_name
-SAVE_SUMMARY_PATH = 'summary/' + FLAGS.env_name
 
 class Agent():
-    def __init__(self, num_actions):
+    def __init__(self, num_actions, config):
+        global FLAGS, SAVE_NETWORK_PATH, SAVE_SUMMARY_PATH
+        FLAGS = config
+        SAVE_NETWORK_PATH = 'saved_networks/' + FLAGS.env_name
+        SAVE_SUMMARY_PATH = 'summary/' + FLAGS.env_name
         self.num_actions = num_actions
         self.epsilon = FLAGS.initial_epsilon
         self.epsilon_step = (FLAGS.initial_epsilon - FLAGS.final_epsilon) / FLAGS.exploration_steps
@@ -254,11 +254,5 @@ class Agent():
         self.t += 1
 
         return action
-
-
-def preprocess(observation, last_observation):
-    processed_observation = np.maximum(observation, last_observation)
-    processed_observation = np.uint8(resize(rgb2gray(processed_observation), (FLAGS.frame_width, FLAGS.frame_height)) * 255)
-    return np.reshape(processed_observation, (1, FLAGS.frame_width, FLAGS.frame_height))
 
 
