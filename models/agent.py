@@ -104,7 +104,7 @@ class Agent():
 
     def get_initial_state(self, observation, last_observation):
         processed_observation = np.maximum(observation, last_observation)
-        processed_observation = np.uint8(resize(rgb2gray(processed_observation), (FLAGS.frame_width, FLAGS.frame_height)) * 255)
+        processed_observation = np.uint8(resize(rgb2gray(processed_observation), (FLAGS.frame_width, FLAGS.frame_height), mode="reflect") * 255)
         state = [processed_observation for _ in range(FLAGS.state_length)]
         return np.stack(state, axis=0)
 
@@ -208,7 +208,7 @@ class Agent():
         terminal_batch = np.array(terminal_batch) + 0
 
         target_q_values_batch = self.target_q_values.eval(feed_dict={self.st: np.float32(np.array(next_state_batch) / 255.0)})
-        y_batch = reward_batch + (1 - terminal_batch) * GAMMA * np.max(target_q_values_batch, axis=1)
+        y_batch = reward_batch + (1 - terminal_batch) * FLAGS.gamma * np.max(target_q_values_batch, axis=1)
 
         loss, _ = self.sess.run([self.loss, self.grad_update], feed_dict={
             self.s: np.float32(np.array(state_batch) / 255.0),
