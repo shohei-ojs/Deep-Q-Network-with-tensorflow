@@ -62,7 +62,7 @@ class Agent():
         self.sess.run(tf.global_variables_initializer())
 
         # Load network
-        if FLAGS.load_network:
+        if not FLAGS.initial_network:
             self.load_network()
 
         # Initialize target network

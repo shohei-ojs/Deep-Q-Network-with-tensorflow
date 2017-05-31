@@ -13,7 +13,7 @@ tf.app.flags.DEFINE_boolean('train', False, """Straing with train mode or not.""
 tf.app.flags.DEFINE_string('env_name', 'Breakout-v0', """Define env.""")
 tf.app.flags.DEFINE_integer('frame_width', 84, """Resized frame width""")
 tf.app.flags.DEFINE_integer('frame_height', 84, """Resized frame height""")
-tf.app.flags.DEFINE_integer('num_episodes', 12000, """Number of episodes the agent plays""")
+tf.app.flags.DEFINE_integer('num_episodes', 30000, """Number of episodes the agent plays""")
 tf.app.flags.DEFINE_integer('state_length', 4, """Number of most recent frames to produce the input to the network""")
 tf.app.flags.DEFINE_float('gamma', 0.99, """Discount factor""")
 tf.app.flags.DEFINE_integer('exploration_steps', 1000000, """Number of steps over which the initial value of epsilon is linearly annealed to its final value""")
@@ -30,7 +30,7 @@ tf.app.flags.DEFINE_float('momentum', 0.95, """Momentum used by RMSProp""")
 tf.app.flags.DEFINE_float('min_grad', 0.01, """Constant added to the squared gradient in the denominator of the RMSProp update""")
 tf.app.flags.DEFINE_integer('save_interval', 300000, """The frequency with which the network is saved""")
 tf.app.flags.DEFINE_integer('no_op_steps', 30, """Maximum number of "do nothing" actions to be performed by the agent at the start of an episode""")
-tf.app.flags.DEFINE_boolean('load_network', False, """""")
+tf.app.flags.DEFINE_boolean('initial_network', False, """""")
 tf.app.flags.DEFINE_integer('num_episodes_at_test', 30, """Number of episodes the agent plays at test time""")
 
 FLAGS = tf.app.flags.FLAGS
